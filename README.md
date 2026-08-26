@@ -1,1 +1,1 @@
-This is an app made with React for csc-3100
+CSC-3100 section 11, Alan Mathew
