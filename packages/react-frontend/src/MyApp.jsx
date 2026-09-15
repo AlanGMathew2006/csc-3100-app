@@ -22,15 +22,35 @@ function MyApp() {
 
   function updateList(person) {
     postUser(person)
-      .then(() => setCharacters([...characters, person]))
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to add user: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((savedPerson) => {
+        setCharacters((prevCharacters) => [...prevCharacters, savedPerson]);
+      })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => i !== index);
-    setCharacters(updated);
+  function removeOneCharacter(id) {
+    fetch(`http://localhost:8000/users/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to delete user: ${response.status}`);
+        }
+        setCharacters((prevCharacters) =>
+          prevCharacters.filter((character) => character.id !== id),
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   useEffect(() => {

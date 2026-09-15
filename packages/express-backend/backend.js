@@ -68,9 +68,12 @@ const addUser = (user) => {
 };
 
 app.post("/users", (req, res) => {
-  const userToAdd = req.body;
+  const userToAdd = {
+    ...req.body,
+    id: req.body.id || Math.random().toString(16).slice(2),
+  };
   addUser(userToAdd);
-  res.send();
+  res.status(201).json(userToAdd);
 });
 
 app.listen(port, () => {
